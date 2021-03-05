@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:design_and_printer/core/models/stamp.dart';
 import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,15 @@ class StampPreview extends StatelessWidget {
     return Container(
       child: AspectRatio(
         aspectRatio: 1,
-        child: render(),
+        child: render(context),
       ),
     );
   }
 
-  Widget render() {
+  Widget render(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-        padding: const EdgeInsets.all(64),
+        padding: EdgeInsets.all(size.width * 1 / 20),
         color: AppColor.previewBackground,
         child: AspectRatio(
           aspectRatio: stamp.height / stamp.width,
@@ -31,23 +33,29 @@ class StampPreview extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(stamp.unitName,
+                      child: AutoSizeText(stamp.unitName,
                           textAlign: TextAlign.center,
+                          minFontSize: 12,
+                          maxLines: 1,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                           )),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(stamp.productName),
+                      child: AutoSizeText(stamp.productName, minFontSize: 8),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("NNH: ${stamp.createAt}"),
+                      child: stamp.createAt.isEmpty
+                          ? Container()
+                          : AutoSizeText("NNH: ${stamp.createAt}",
+                              minFontSize: 8),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("HSD: ${stamp.expriedAt}"),
+                      child: AutoSizeText("HSD: ${stamp.expriedAt}",
+                          minFontSize: 8),
                     )
                   ])),
         ));

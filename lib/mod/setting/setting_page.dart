@@ -4,6 +4,7 @@ import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
 import 'package:design_and_printer/mod/setting/setting_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
         }
       });
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Cài đặt', style: TextStyle(color: Colors.black)),
           elevation: 0.1,
@@ -87,18 +89,88 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                               await model.save();
                             },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text('Copyright @ 2021 DaLatHub',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                textAlign: TextAlign.start),
-                          ),
                         ],
                       )),
                   flex: 1),
-              Expanded(child: Container(color: Colors.green), flex: 1),
+              Expanded(
+                  child: ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: Text(
+                          "GIỚI THIỆU",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Tên phần mềm: DaLatHub Desige and Printer",
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Bản quyền phần mềm thuộc về DaLatHub.",
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                            child: RichText(
+                              text: TextSpan(children: <TextSpan>[
+                                TextSpan(
+                                    text: 'Website:',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    )),
+                                TextSpan(text: 'dalathub.com'),
+                                TextSpan(
+                                    text: 'http://dalathub.com',
+                                    style: TextStyle(color: Colors.blue))
+                              ]),
+                            ),
+                            onTap: () async {
+                              await canLaunch(model.url)
+                                  ? await launch(model.url)
+                                  : throw 'Could not launch ${model.url}';
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: Text(
+                          "LIÊN HỆ",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "0387577092 - Nguyễn Văn Huy Dũng",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "0387577092 - Phan Trung Tính",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Image.asset("assets/dalathub_logo_4x.png")),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text('Copyright @ 2021 DaLatHub',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                            textAlign: TextAlign.center),
+                      ),
+                    ],
+                  ),
+                  flex: 1),
             ],
           ),
         ),

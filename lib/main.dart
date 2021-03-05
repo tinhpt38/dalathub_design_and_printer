@@ -1,4 +1,4 @@
-import 'package:design_and_printer/mod/home/home_page.dart';
+import 'package:design_and_printer/mod/landing/landing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: LandingPage(),
     );
   }
 }

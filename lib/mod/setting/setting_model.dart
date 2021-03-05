@@ -10,10 +10,15 @@ class SettingModel extends ChangeNotifier {
       TextEditingController(text: 'DaLatHub');
   TextEditingController _widthController = TextEditingController(text: '30');
   TextEditingController _heightController = TextEditingController(text: '22');
+  TextEditingController _printerAddress =
+      TextEditingController(text: '121.0.0.1');
+  TextEditingController _printerPort = TextEditingController(text: '8080');
   //    Get
   TextEditingController get unitController => _unitController;
   TextEditingController get widthController => _widthController;
   TextEditingController get heightController => _heightController;
+  TextEditingController get printerAddres => _printerAddress;
+  TextEditingController get printerPort => _printerPort;
   // Status
   //    Set
   bool _error = false;
@@ -23,6 +28,7 @@ class SettingModel extends ChangeNotifier {
   bool get error => _error;
   bool get success => _success;
   String get message => _message;
+  String url = 'http://dalathub.com/';
 
   // Original
   //    Set
