@@ -30,6 +30,12 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
               content: Text(model.message), backgroundColor: Colors.red));
           model.setError(false);
         }
+        if (model.success) {
+          final messenger = ScaffoldMessenger.of(context);
+          messenger.showSnackBar(SnackBar(
+              content: Text(model.message), backgroundColor: Colors.green));
+          model.setSuccess(false);
+        }
       });
       return Scaffold(
         backgroundColor: Colors.white,
@@ -119,7 +125,7 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                                     padding: const EdgeInsets.only(top: 26),
                                     child: Button('IN', () async {
                                       model.setQuantity();
-                                      model.print();
+                                      await model.print();
                                     }),
                                   ),
                                   flex: 1),

@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:design_and_printer/core/models/stamp.dart';
 import 'package:design_and_printer/core/utils/io.dart';
+import 'package:design_and_printer/core/utils/printer_core.dart';
 import 'package:design_and_printer/core/values/share_name.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomeModel extends ChangeNotifier {
   //Vars
@@ -12,8 +14,12 @@ class HomeModel extends ChangeNotifier {
   //    Set
   TextEditingController _unitController = TextEditingController();
   TextEditingController _productController = TextEditingController();
-  TextEditingController _createAtController = TextEditingController();
-  TextEditingController _expriedAtController = TextEditingController();
+  TextEditingController _createAtController = TextEditingController(
+      text:
+          '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}');
+  TextEditingController _expriedAtController = TextEditingController(
+      text:
+          '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}');
   TextEditingController _printQuantityController =
       TextEditingController(text: '1');
   //    Get
@@ -25,8 +31,11 @@ class HomeModel extends ChangeNotifier {
   //  Object
   //    Set
   Stamp _stamp = Stamp('DaLatHub', 'Coffe', '30/02/2021', '02/04/2021', 30, 20);
+  PrintCore _printCore = PrintCore();
+  Timer _timer;
   //    Get
   Stamp get stamp => _stamp;
+
   //  Original
   //    Set
   int _printQuantity = 1;
@@ -37,21 +46,35 @@ class HomeModel extends ChangeNotifier {
   //  Status
   //    Set
   bool _error = false;
+  bool _success = false;
   String _message = '';
   //    Get
   bool get error => _error;
+  bool get success => _success;
   String get message => _message;
 
   HomeModel();
 
   void preview() {
-    _stamp = Stamp(unitController.text, productController.text,
-        createAtController.text, expriedAtController.text, 30, 20);
-    notifyListeners();
+    if (expriedAtController.text.isEmpty ) {
+      _error = true;
+      _message = 'Ngày hết hạn không được để trống';
+      notifyListeners();
+    } else {
+      _error = false;
+      _stamp = Stamp(unitController.text, productController.text,
+          createAtController.text, expriedAtController.text, 30, 20);
+      notifyListeners();
+    }
   }
 
   void setError(bool err) {
     _error = err;
+    notifyListeners();
+  }
+
+  void setSuccess(bool suceess) {
+    _success = success;
     notifyListeners();
   }
 
@@ -75,30 +98,45 @@ class HomeModel extends ChangeNotifier {
       _width = int.parse(temp[0].trim());
       _height = int.parse(temp[1].trim());
       _stamp = Stamp(_unitController.text, '', '', '', 30, 20);
-
       notifyListeners();
     } catch (_) {}
   }
 
-  void print() async {
-    const PaperSize paper = PaperSize.mm80;
-    final profile = await CapabilityProfile.load();
-    final printer = NetworkPrinter(paper, profile);
-    final PosPrintResult res =
-        await printer.connect('192.168.0.123', port: 9100);
-    if (res == PosPrintResult.success) {
+  Future<void> print() async {
+    try {
+      NetworkPrinter printer = await _printCore.fetch((PosPrintResult status) {
+        if (status == PosPrintResult.timeout) {
+          _error = true;
+          _message = 'Không tìm thấy máy in Xprinter...';
+          notifyListeners();
+        }
+        if (status == PosPrintResult.printInProgress) {
+          _success = true;
+          _message = 'Đang in...';
+          notifyListeners();
+        }
+        if (status == PosPrintResult.success) {
+          _success = true;
+          _message = 'In xong';
+          notifyListeners();
+        }
+      });
       makeReceipt(printer);
+
       printer.disconnect();
+      return;
+    } catch (_) {
+      int a = 10;
     }
   }
 
   void makeReceipt(NetworkPrinter printer) {
-    printer.text(
-        'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
-        styles: PosStyles(codeTable: 'CP1252'));
-    printer.text('Special 2: blåbærgrød',
-        styles: PosStyles(codeTable: 'CP1252'));
+    // printer.text(
+    //     'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+    // printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
+    //     styles: PosStyles(codeTable: 'CP1252'));
+    // printer.text('Special 2: blåbærgrød',
+    //     styles: PosStyles(codeTable: 'CP1252'));
 
     // printer.text('Bold text', styles: PosStyles(bold: true));
     // printer.text('Reverse text', styles: PosStyles(reverse: true));

@@ -9,13 +9,18 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-          color: AppColor.buttonColor,
-          child: Text(lable.toUpperCase())),
+    return Ink(
+      color: Colors.blue,
+      child: InkWell(
+        onTap: onTap,
+        splashColor: Colors.black38,
+        child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+            // color: AppColor.buttonColor,
+            child: Text(lable.toUpperCase(),
+                style: TextStyle(color: Colors.white))),
+      ),
     );
   }
 }
