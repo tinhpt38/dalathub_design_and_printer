@@ -117,16 +117,16 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                               Expanded(
                                 flex: 1,
                                 child: Input(
+                                    maxLen: 3,
                                     controller: model.printQuantityController,
                                     title: "Số lượng",
-                                    onChange: (_) {}),
+                                    onChange: null),
                               ),
                               SizedBox(width: 100),
                               Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 26),
                                     child: Button('IN', () async {
-                                      model.setQuantity();
                                       await model.print();
                                     }),
                                   ),

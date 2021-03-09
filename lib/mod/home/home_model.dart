@@ -67,16 +67,6 @@ class HomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setQuantity() {
-    try {
-      _printQuantity = int.parse(_printQuantityController.text);
-    } catch (_) {
-      _error = true;
-      _message = 'Số lượng in không hợp lệ';
-      notifyListeners();
-    }
-  }
-
   FileIO fileIO = FileIO();
 
   Future<void> readConfig() async {
@@ -106,6 +96,29 @@ class HomeModel extends ChangeNotifier {
   // }
 
   Future<void> print() async {
+    if (_productController.text.isEmpty) {
+      _error = true;
+      _message = 'Tên sản phẩm đang trống';
+      notifyListeners();
+      return;
+    }
+    try {
+      _printQuantity = int.parse(_printQuantityController.text);
+      if (_printQuantity < 0) {
+        _printQuantity = 0;
+        _error = true;
+        _message = 'Số lượng in không hợp lệ. Số lượng là một số';
+        notifyListeners();
+        return;
+      }
+    } catch (_) {
+      _printQuantity = 0;
+      _error = true;
+      _message = 'Số lượng in không hợp lệ';
+      notifyListeners();
+      return;
+    }
+
     final doc = pw.Document();
     PdfPageFormat format = PdfPageFormat(175, 50);
     doc.addPage(pw.Page(
@@ -146,14 +159,16 @@ class HomeModel extends ChangeNotifier {
 
   pw.Widget generatePdf() {
     return pw.Column(children: [
-      _stamp.unitName.isNotEmpty
+      _unitController.text.isNotEmpty
           ? pw.Padding(
               padding: const pw.EdgeInsets.symmetric(vertical: 4),
               child: pw.Text(_stamp.unitName,
                   style: pw.TextStyle(fontSize: 6),
                   textAlign: pw.TextAlign.center),
             )
-          : Container(),
+          : pw.Container(
+              padding: const pw.EdgeInsets.symmetric(vertical: 4),
+            ),
       pw.Padding(
         padding: const pw.EdgeInsets.only(bottom: 4),
         child: pw.Text(_stamp.productName.toUpperCase(),
