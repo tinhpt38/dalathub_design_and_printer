@@ -7,6 +7,7 @@ import 'package:design_and_printer/mod/setting/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:matt_q/matt_q.dart';
+import 'package:printing/printing.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +19,15 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
   void widgetsBindingAsyncCallback(
       BuildContext context, HomeModel model) async {
     await model.readConfig();
+  }
+
+  @override
+  void initState() {
+    Printing.info().then((PrintingInfo info) {
+      print("info");
+      print(info);
+    });
+    super.initState();
   }
 
   @override
@@ -127,6 +137,7 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 26),
                                     child: Button('IN', () async {
+                                      // await selectPrinter(model, context);
                                       await model.print();
                                     }),
                                   ),
@@ -145,6 +156,12 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
         ),
       );
     };
+  }
+
+  Future<void> selectPrinter(HomeModel model, BuildContext context) async {
+    Printer printer = await Printing.pickPrinter(context: context);
+    // print(printer);
+    model.setPrinter(printer);
   }
 
   @override

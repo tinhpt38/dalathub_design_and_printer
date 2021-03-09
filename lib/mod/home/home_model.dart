@@ -39,6 +39,10 @@ class HomeModel extends ChangeNotifier {
   bool get success => _success;
   String get message => _message;
 
+  Printer _printer;
+
+  Printer get printer => _printer;
+
   HomeModel() {
     _stamp = Stamp(_unitController.text.trim(), 'Coffe',
         _createAtController.text, _expriedAtController.text);
@@ -95,6 +99,10 @@ class HomeModel extends ChangeNotifier {
   //       onLayout: (PdfPageFormat format) async => doc.save());
   // }
 
+  setPrinter(Printer value) {
+    _printer = value;
+  }
+
   Future<void> print() async {
     if (_productController.text.isEmpty) {
       _error = true;
@@ -121,7 +129,21 @@ class HomeModel extends ChangeNotifier {
 
     final doc = pw.Document();
     PdfPageFormat format = PdfPageFormat(175, 50);
-    doc.addPage(pw.Page(
+    for (int i = 0; i < _printQuantity; i++) {
+      doc.addPage(renderPage(format));
+    }
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+
+    // await Printing.directPrintPdf(
+    //     printer: _printer,
+    //     onLayout: (PdfPageFormat format) async {
+    //       return await doc.save();
+    //     });
+  }
+
+  pw.Page renderPage(PdfPageFormat format) {
+    return pw.Page(
         pageFormat: format,
         build: (pw.Context context) {
           return pw.Row(
@@ -152,9 +174,7 @@ class HomeModel extends ChangeNotifier {
                   ),
                 ),
               ]);
-        })); // Page
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
+        }); // Pa
   }
 
   pw.Widget generatePdf() {
