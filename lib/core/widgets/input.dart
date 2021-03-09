@@ -6,12 +6,14 @@ class Input extends StatelessWidget {
   final String title;
   final Function(String) onChange;
   final TextInputType textInputType;
+  final int maxLen;
 
   Input(
       {this.controller,
       this.title,
       this.onChange,
-      this.textInputType = TextInputType.text});
+      this.textInputType = TextInputType.text,
+      this.maxLen = 1000});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class Input extends StatelessWidget {
           ),
         ),
         TextField(
+          maxLength: maxLen,
           onChanged: onChange,
           controller: controller,
           keyboardType: textInputType,

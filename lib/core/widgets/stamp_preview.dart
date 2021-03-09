@@ -24,26 +24,33 @@ class StampPreview extends StatelessWidget {
         padding: EdgeInsets.all(size.width * 1 / 20),
         color: AppColor.previewBackground,
         child: AspectRatio(
-          aspectRatio: stamp.height / stamp.width,
+          aspectRatio: 3 / 2,
           child: Container(
               color: Colors.white,
               alignment: Alignment.center,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    stamp.unitName.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AutoSizeText(stamp.unitName,
+                                textAlign: TextAlign.center,
+                                minFontSize: 12,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )),
+                          )
+                        : Container(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: AutoSizeText(stamp.unitName,
-                          textAlign: TextAlign.center,
-                          minFontSize: 12,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 16,
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AutoSizeText(stamp.productName, minFontSize: 8),
+                      child: AutoSizeText(
+                        stamp.productName.toUpperCase(),
+                        minFontSize: 8,
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -52,11 +59,7 @@ class StampPreview extends StatelessWidget {
                           : AutoSizeText("NNH: ${stamp.createAt}",
                               minFontSize: 8),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AutoSizeText("HSD: ${stamp.expriedAt}",
-                          minFontSize: 8),
-                    )
+                    AutoSizeText("HSD: ${stamp.expriedAt}", minFontSize: 8)
                   ])),
         ));
   }

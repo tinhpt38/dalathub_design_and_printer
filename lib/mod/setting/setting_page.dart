@@ -1,9 +1,9 @@
-import 'package:design_and_printer/core/matt_q/matt_q.dart';
 import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
 import 'package:design_and_printer/mod/setting/setting_model.dart';
 import 'package:flutter/material.dart';
+import 'package:matt_q/matt_q.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {

@@ -1,4 +1,3 @@
-import 'package:design_and_printer/core/matt_q/matt_q.dart';
 import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/datepicker.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
@@ -7,6 +6,7 @@ import 'package:design_and_printer/mod/home/home_model.dart';
 import 'package:design_and_printer/mod/setting/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:matt_q/matt_q.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -75,12 +75,14 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                         child: Column(
                           children: [
                             Input(
+                                maxLen: 30,
                                 controller: model.unitController,
                                 title: "Tên đơn vị",
                                 onChange: (_) {
                                   model.preview();
                                 }),
                             Input(
+                                maxLen: 30,
                                 controller: model.productController,
                                 title: "Tên sản phẩm",
                                 onChange: (_) {

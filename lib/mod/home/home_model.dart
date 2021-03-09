@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:design_and_printer/core/models/stamp.dart';
 import 'package:design_and_printer/core/utils/io.dart';
-import 'package:design_and_printer/core/utils/printer_core.dart';
 import 'package:design_and_printer/core/values/share_name.dart';
-import 'package:esc_pos_printer/esc_pos_printer.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class HomeModel extends ChangeNotifier {
   //Vars
@@ -28,42 +28,31 @@ class HomeModel extends ChangeNotifier {
   TextEditingController get createAtController => _createAtController;
   TextEditingController get expriedAtController => _expriedAtController;
   TextEditingController get printQuantityController => _printQuantityController;
-  //  Object
-  //    Set
-  Stamp _stamp = Stamp('DaLatHub', 'Coffe', '30/02/2021', '02/04/2021', 30, 20);
-  PrintCore _printCore = PrintCore();
-  Timer _timer;
-  //    Get
+  Stamp _stamp;
   Stamp get stamp => _stamp;
-
-  //  Original
-  //    Set
   int _printQuantity = 1;
-  int _width = 30;
-  int _height = 20;
-  //    Get
   int get printQuantiry => _printQuantity;
-  //  Status
-  //    Set
   bool _error = false;
   bool _success = false;
   String _message = '';
-  //    Get
   bool get error => _error;
   bool get success => _success;
   String get message => _message;
 
-  HomeModel();
+  HomeModel() {
+    _stamp = Stamp(_unitController.text.trim(), 'Coffe',
+        _createAtController.text, _expriedAtController.text);
+  }
 
   void preview() {
-    if (expriedAtController.text.isEmpty ) {
+    if (expriedAtController.text.isEmpty) {
       _error = true;
       _message = 'Ngày hết hạn không được để trống';
       notifyListeners();
     } else {
       _error = false;
       _stamp = Stamp(unitController.text, productController.text,
-          createAtController.text, expriedAtController.text, 30, 20);
+          createAtController.text, expriedAtController.text);
       notifyListeners();
     }
   }
@@ -93,64 +82,89 @@ class HomeModel extends ChangeNotifier {
   Future<void> readConfig() async {
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
-      String sizeContent = await fileIO.readFile(ShareName.size);
-      List<String> temp = sizeContent.split("x");
-      _width = int.parse(temp[0].trim());
-      _height = int.parse(temp[1].trim());
-      _stamp = Stamp(_unitController.text, '', '', '', 30, 20);
+      _stamp = Stamp(unitController.text, productController.text,
+          createAtController.text, expriedAtController.text);
       notifyListeners();
     } catch (_) {}
   }
 
-  Future<void> print() async {
-    try {
-      NetworkPrinter printer = await _printCore.fetch((PosPrintResult status) {
-        if (status == PosPrintResult.timeout) {
-          _error = true;
-          _message = 'Không tìm thấy máy in Xprinter...';
-          notifyListeners();
-        }
-        if (status == PosPrintResult.printInProgress) {
-          _success = true;
-          _message = 'Đang in...';
-          notifyListeners();
-        }
-        if (status == PosPrintResult.success) {
-          _success = true;
-          _message = 'In xong';
-          notifyListeners();
-        }
-      });
-      makeReceipt(printer);
+  // Future<void> print() async {
+  //   final doc = pw.Document();
+  //   PdfPageFormat format = PdfPageFormat(87.5, 55, marginAll: 5);
+  //   doc.addPage(pw.Page(
+  //       pageFormat: format,
+  //       build: (pw.Context context) {
+  //         return pw.Container(
+  //             width: double.infinity,
+  //             decoration: pw.BoxDecoration(
+  //               border: pw.Border.all(color: PdfColors.black, width: 1),
+  //             ),
+  //             child: generatePdf());
+  //       })); // Page
+  //   await Printing.layoutPdf(
+  //       onLayout: (PdfPageFormat format) async => doc.save());
+  // }
 
-      printer.disconnect();
-      return;
-    } catch (_) {
-      int a = 10;
-    }
+  Future<void> print() async {
+    final doc = pw.Document();
+    PdfPageFormat format = PdfPageFormat(175, 50);
+    doc.addPage(pw.Page(
+        pageFormat: format,
+        build: (pw.Context context) {
+          return pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Expanded(
+                  flex: 1,
+                  child: pw.Container(
+                    width: double.infinity,
+                    margin: const pw.EdgeInsets.only(right: 8),
+                    alignment: pw.Alignment.center,
+                    decoration: pw.BoxDecoration(
+                      border: pw.Border.all(color: PdfColors.black, width: 1),
+                    ),
+                    child: generatePdf(),
+                  ),
+                ),
+                pw.Expanded(
+                  flex: 1,
+                  child: pw.Container(
+                    margin: const pw.EdgeInsets.only(left: 8),
+                    width: double.infinity,
+                    alignment: pw.Alignment.center,
+                    decoration: pw.BoxDecoration(
+                      border: pw.Border.all(color: PdfColors.black, width: 1),
+                    ),
+                    child: generatePdf(),
+                  ),
+                ),
+              ]);
+        })); // Page
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
   }
 
-  void makeReceipt(NetworkPrinter printer) {
-    // printer.text(
-    //     'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    // printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
-    //     styles: PosStyles(codeTable: 'CP1252'));
-    // printer.text('Special 2: blåbærgrød',
-    //     styles: PosStyles(codeTable: 'CP1252'));
-
-    // printer.text('Bold text', styles: PosStyles(bold: true));
-    // printer.text('Reverse text', styles: PosStyles(reverse: true));
-    // printer.text('Underlined text',
-    //     styles: PosStyles(underline: true), linesAfter: 1);
-    printer.text(_unitController.text.trim(),
-        styles: PosStyles(align: PosAlign.center), linesAfter: 2);
-    printer.text(_productController.text.trim(),
-        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
-    printer.text(_createAtController.text.trim(),
-        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
-    printer.text(_expriedAtController.text.trim(),
-        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
-    printer.feed(2);
-    printer.cut();
+  pw.Widget generatePdf() {
+    return pw.Column(children: [
+      _stamp.unitName.isNotEmpty
+          ? pw.Padding(
+              padding: const pw.EdgeInsets.symmetric(vertical: 4),
+              child: pw.Text(_stamp.unitName,
+                  style: pw.TextStyle(fontSize: 6),
+                  textAlign: pw.TextAlign.center),
+            )
+          : Container(),
+      pw.Padding(
+        padding: const pw.EdgeInsets.only(bottom: 4),
+        child: pw.Text(_stamp.productName.toUpperCase(),
+            style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center),
+      ),
+      _stamp.createAt.isNotEmpty
+          ? pw.Text('NNH: ' + _stamp.createAt,
+              style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center)
+          : pw.Container(),
+      pw.Text('HSD: ' + _stamp.expriedAt,
+          style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center),
+    ]);
   }
 }
