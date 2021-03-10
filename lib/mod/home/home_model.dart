@@ -128,7 +128,7 @@ class HomeModel extends ChangeNotifier {
     }
 
     final doc = pw.Document();
-    PdfPageFormat format = PdfPageFormat(175, 50);
+    PdfPageFormat format = PdfPageFormat(180, 50);
     for (int i = 0; i < _printQuantity; i++) {
       doc.addPage(renderPage(format));
     }
@@ -147,13 +147,14 @@ class HomeModel extends ChangeNotifier {
         pageFormat: format,
         build: (pw.Context context) {
           return pw.Row(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Expanded(
                   flex: 1,
                   child: pw.Container(
                     width: double.infinity,
-                    margin: const pw.EdgeInsets.only(right: 8),
+                    // margin: const pw.EdgeInsets.only(right: 8),
                     alignment: pw.Alignment.center,
                     decoration: pw.BoxDecoration(
                       border: pw.Border.all(color: PdfColors.black, width: 1),
@@ -161,17 +162,17 @@ class HomeModel extends ChangeNotifier {
                     child: generatePdf(),
                   ),
                 ),
+                pw.SizedBox(width: 16),
                 pw.Expanded(
                   flex: 1,
                   child: pw.Container(
-                    margin: const pw.EdgeInsets.only(left: 8),
-                    width: double.infinity,
-                    alignment: pw.Alignment.center,
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(color: PdfColors.black, width: 1),
-                    ),
-                    child: generatePdf(),
-                  ),
+                      // margin: const pw.EdgeInsets.only(left: 8),
+                      width: double.infinity,
+                      alignment: pw.Alignment.center,
+                      decoration: pw.BoxDecoration(
+                        border: pw.Border.all(color: PdfColors.black, width: 1),
+                      ),
+                      child: generatePdf()),
                 ),
               ]);
         }); // Pa
