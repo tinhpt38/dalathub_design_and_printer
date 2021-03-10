@@ -49,109 +49,106 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
       });
       return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 255,
-                      height: 50,
-                      child: Image.asset('assets/dalathub_logo_4x.png'),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => SettingPage()));
-                      },
-                      child: SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: Image.asset('assets/settings_1x.png'),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(children: [
-                  Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          children: [
-                            Input(
-                                maxLen: 30,
-                                controller: model.unitController,
-                                title: "Tên đơn vị",
-                                onChange: (_) {
-                                  model.preview();
-                                }),
-                            Input(
-                                maxLen: 30,
-                                controller: model.productController,
-                                title: "Tên sản phẩm",
-                                onChange: (_) {
-                                  model.preview();
-                                }),
-                            DatePicker(
-                                controller: model.createAtController,
-                                title: "Ngày nhập",
-                                onChange: () {
-                                  model.preview();
-                                }),
-                            DatePicker(
-                                controller: model.expriedAtController,
-                                title: "Ngày hết hạn",
-                                onChange: () {
-                                  model.preview();
-                                }),
-                          ],
-                        )),
-                    flex: 1,
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 255,
+                    height: 50,
+                    child: Image.asset('assets/dalathub_logo_4x.png'),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => SettingPage()));
+                    },
+                    child: SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: Image.asset('assets/settings_1x.png'),
+                    ),
+                  ),
+                ],
+              ),
+              Row(children: [
+                Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         children: [
-                          StampPreview(model.stamp),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Input(
-                                    maxLen: 3,
-                                    controller: model.printQuantityController,
-                                    title: "Số lượng",
-                                    onChange: null),
-                              ),
-                              SizedBox(width: 100),
-                              Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 26),
-                                    child: Button('IN', () async {
-                                      // await selectPrinter(model, context);
-                                      await model.print();
-                                    }),
-                                  ),
-                                  flex: 1),
-                            ],
-                          ),
+                          Input(
+                              maxLen: 30,
+                              controller: model.unitController,
+                              title: "Tên đơn vị",
+                              onChange: (_) {
+                                model.preview();
+                              }),
+                          Input(
+                              maxLen: 30,
+                              controller: model.productController,
+                              title: "Tên sản phẩm",
+                              onChange: (_) {
+                                model.preview();
+                              }),
+                          DatePicker(
+                              controller: model.createAtController,
+                              title: "Ngày nhập",
+                              onChange: () {
+                                model.preview();
+                              }),
+                          DatePicker(
+                              controller: model.expriedAtController,
+                              title: "Ngày hết hạn",
+                              onChange: () {
+                                model.preview();
+                              }),
                         ],
-                      ),
+                      )),
+                  flex: 1,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 48),
+                    child: Column(
+                      children: [
+                        StampPreview(model.stamp),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Input(
+                                  maxLen: 3,
+                                  controller: model.printQuantityController,
+                                  title: "Số lượng",
+                                  onChange: null),
+                            ),
+                            SizedBox(width: 100),
+                            Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 26),
+                                  child: Button('IN', () async {
+                                    // await selectPrinter(model, context);
+                                    await model.print();
+                                  }),
+                                ),
+                                flex: 1),
+                          ],
+                        ),
+                      ],
                     ),
-                    flex: 1,
                   ),
-                ]),
-              ],
-            ),
+                  flex: 1,
+                ),
+              ]),
+            ],
           ),
         ),
       );

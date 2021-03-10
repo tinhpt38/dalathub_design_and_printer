@@ -37,6 +37,7 @@ class SettingModel extends ChangeNotifier {
   FileIO fileIO = FileIO();
 
   Future<void> readConfig() async {
+    _printers = await Printing.listPrinters();
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
       notifyListeners();
