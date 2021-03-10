@@ -35,10 +35,12 @@ class HomeModel extends ChangeNotifier {
   int get printQuantiry => _printQuantity;
   bool _error = false;
   bool _success = false;
+  bool _inProgress = false;
   String _message = '';
   bool get error => _error;
   bool get success => _success;
   String get message => _message;
+  bool get inProgress => _inProgress;
 
   Printer _printer;
 
@@ -65,6 +67,7 @@ class HomeModel extends ChangeNotifier {
   void clearMessage() {
     _error = false;
     _success = false;
+    _inProgress = false;
     notifyListeners();
   }
 
@@ -75,15 +78,23 @@ class HomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> readConfig() async {
+  Future<void> loadConfig() async {
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
       String printerFormDB = await fileIO.readFile(ShareName.device);
       if (printerFormDB != null) {
         Map<String, dynamic> json = jsonDecode(printerFormDB);
         _printer = Printer.fromMap(json);
+        // if (_printer.isAvailable) {
         _success = true;
+        _error = false;
         _message = 'Đã kết nối với máy in ${_printer.name}';
+        // } else {
+        //   _error = true;
+        //   _success = false;
+        //   _message =
+        //       'Không thể kết nối với máy in ${_printer.name}, kiểm tra kết nối';
+        // }
       }
       _stamp = Stamp(unitController.text, productController.text,
           createAtController.text, expriedAtController.text);
@@ -157,6 +168,7 @@ class HomeModel extends ChangeNotifier {
           onLayout: (PdfPageFormat _) async {
             return doc.save();
           });
+      notifyListeners();
     }
   }
 

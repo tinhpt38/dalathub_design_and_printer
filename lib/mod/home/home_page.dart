@@ -1,3 +1,4 @@
+import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/datepicker.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
   @override
   void widgetsBindingAsyncCallback(
       BuildContext context, HomeModel model) async {
-    await model.readConfig();
+    await model.loadConfig();
   }
 
   @override
@@ -44,6 +45,12 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
           messenger.showSnackBar(SnackBar(
               content: Text(model.message), backgroundColor: Colors.green));
         }
+        if (model.inProgress) {
+          final messenger = ScaffoldMessenger.of(context);
+          messenger.showSnackBar(SnackBar(
+              content: Text(model.message),
+              backgroundColor: AppColor.buttonColor));
+        }
         model.clearMessage();
       });
       return Scaffold(
@@ -64,15 +71,32 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                       height: 50,
                       child: Image.asset('assets/dalathub_logo_4x.png'),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => SettingPage()));
-                      },
-                      child: SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: Image.asset('assets/settings_1x.png'),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () async {
+                          await model.loadConfig();
+                        },
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Image.asset('assets/refresh.png'),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => SettingPage()));
+                        },
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Image.asset('assets/settings_1x.png'),
+                        ),
                       ),
                     ),
                   ],
