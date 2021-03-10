@@ -1,4 +1,3 @@
-import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/datepicker.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
@@ -44,12 +43,6 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
           final messenger = ScaffoldMessenger.of(context);
           messenger.showSnackBar(SnackBar(
               content: Text(model.message), backgroundColor: Colors.green));
-        }
-        if (model.inProgress) {
-          final messenger = ScaffoldMessenger.of(context);
-          messenger.showSnackBar(SnackBar(
-              content: Text(model.message),
-              backgroundColor: AppColor.buttonColor));
         }
         model.clearMessage();
       });
@@ -172,6 +165,7 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                     flex: 1,
                   ),
                 ]),
+                SizedBox(height: 100),
               ],
             ),
           ),
