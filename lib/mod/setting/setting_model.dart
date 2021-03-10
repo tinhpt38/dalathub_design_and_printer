@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:design_and_printer/core/utils/io.dart';
 import 'package:design_and_printer/core/values/share_name.dart';
@@ -41,6 +42,7 @@ class SettingModel extends ChangeNotifier {
 
   Future<void> readConfig() async {
     _printers = await Printing.listPrinters();
+    // _printers = _printers.where((element) => element.isAvailable);
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
       String printerFormDB = await fileIO.readFile(ShareName.device);

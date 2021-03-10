@@ -133,11 +133,17 @@ class HomeModel extends ChangeNotifier {
     }
 
     final doc = pw.Document();
-    PdfPageFormat format =
-        PdfPageFormat(200, 50, marginLeft: 8, marginRight: 4);
-    for (int i = 0; i < _printQuantity; i++) {
-      doc.addPage(renderPage(format));
-    }
+    // PdfPageFormat format =
+    //     PdfPageFormat(200, 50, marginLeft: 8, marginRight: 4);
+    // PdfPageFormat format = PdfPageFormat(200, 60); //50
+    PdfPageFormat format = PdfPageFormat(190, 60, marginTop: 2); //50
+    // for (int i = 0; i < _printQuantity; i++) {
+    //   doc.addPage(renderPage(format));
+    // }
+    doc.addPage(pw.MultiPage(
+        pageFormat: format,
+        build: (_) =>
+            List<pw.Widget>.generate(_printQuantity, (_) => renderItem())));
     // await Printing.layoutPdf(
     //     onLayout: (PdfPageFormat format) async => doc.save());
     if (_printer == null) {
@@ -146,10 +152,43 @@ class HomeModel extends ChangeNotifier {
     } else {
       await Printing.directPrintPdf(
           printer: _printer,
-          onLayout: (PdfPageFormat format) async {
-            return await doc.save();
+          // format: PdfPageFormat(210, 60),
+          format: PdfPageFormat(200, 60),
+          onLayout: (PdfPageFormat _) async {
+            return doc.save();
           });
     }
+  }
+
+  pw.Widget renderItem() {
+    return pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          pw.Expanded(
+            flex: 1,
+            child: pw.Container(
+              width: double.infinity,
+              alignment: pw.Alignment.center,
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.black, width: 1),
+              ),
+              child: generatePdf(),
+            ),
+          ),
+          pw.SizedBox(width: 16),
+          pw.Expanded(
+            flex: 1,
+            child: pw.Container(
+                // margin: const pw.EdgeInsets.only(left: 8),
+                width: double.infinity,
+                alignment: pw.Alignment.center,
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(color: PdfColors.black, width: 1),
+                ),
+                child: generatePdf()),
+          ),
+        ]);
   }
 
   pw.Page renderPage(PdfPageFormat format) {
@@ -172,7 +211,7 @@ class HomeModel extends ChangeNotifier {
                     child: generatePdf(),
                   ),
                 ),
-                pw.SizedBox(width: 16),
+                pw.SizedBox(width: 8),
                 pw.Expanded(
                   flex: 1,
                   child: pw.Container(
@@ -200,7 +239,7 @@ class HomeModel extends ChangeNotifier {
             )
           : pw.Container(),
       pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 2),
+        padding: const pw.EdgeInsets.all(2),
         child: pw.Text(_stamp.productName.toUpperCase(),
             style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
             textAlign: pw.TextAlign.center),
@@ -210,7 +249,7 @@ class HomeModel extends ChangeNotifier {
               style: pw.TextStyle(fontSize: 8), textAlign: pw.TextAlign.center)
           : pw.Container(),
       pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 4),
+        padding: const pw.EdgeInsets.only(bottom: 2),
         child: pw.Text('HSD: ' + _stamp.expriedAt,
             style: pw.TextStyle(fontSize: 8), textAlign: pw.TextAlign.center),
       ),
