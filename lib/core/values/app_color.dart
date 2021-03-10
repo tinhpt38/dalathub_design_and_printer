@@ -5,4 +5,5 @@ class AppColor {
   static const Color textFieldBackground = Color(0xffE7E7E7);
   static const Color previewBackground = Color(0xffE9E9E9);
   static const Color buttonColor = Color(0xff02D8FE);
+  static const Color violet = Color(0xff7581F4);
 }

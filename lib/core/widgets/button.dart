@@ -1,3 +1,4 @@
+import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
@@ -9,7 +10,7 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Ink(
-      color: Colors.blue,
+      color: AppColor.violet,
       child: InkWell(
         onTap: onTap,
         splashColor: Colors.black38,

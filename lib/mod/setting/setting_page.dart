@@ -36,10 +36,9 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Cài đặt', style: TextStyle(color: Colors.black)),
-          elevation: 0.1,
-          backgroundColor: AppColor.previewBackground,
-        ),
+            title: Text('Cài đặt', style: TextStyle(color: Colors.black)),
+            elevation: 0.0,
+            backgroundColor: AppColor.previewBackground),
         body: Container(
           padding: const EdgeInsets.all(24),
           child: Row(
@@ -55,33 +54,6 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                               controller: model.unitController,
                               title: 'Tên đơn vị',
                               onChange: null),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Text('Khổ giấy'),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Input(
-                                    textInputType: TextInputType.number,
-                                    controller: model.widthController,
-                                    title: "Chiều ngang",
-                                    onChange: null),
-                              ),
-                              SizedBox(width: 200),
-                              Expanded(
-                                flex: 1,
-                                child: Input(
-                                    textInputType: TextInputType.number,
-                                    controller: model.heightController,
-                                    title: "Chiều dọc",
-                                    onChange: null),
-                              ),
-                            ],
-                          ),
                           Spacer(),
                           Button(
                             'Lưu',
@@ -126,7 +98,7 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                                     )),
                                 TextSpan(text: 'dalathub.com'),
                                 TextSpan(
-                                    text: 'http://dalathub.com',
+                                    text: 'https://dalathub.com',
                                     style: TextStyle(color: Colors.blue))
                               ]),
                             ),
@@ -146,14 +118,14 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "0387577092 - Nguyễn Văn Huy Dũng",
+                          "Nguyễn Văn Huy Dũng: 0387-577-092",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "0387577092 - Phan Trung Tính",
+                          "Phan Trung Tính: 0865-802-659",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
