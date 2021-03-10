@@ -48,7 +48,8 @@ class StampPreview extends StatelessWidget {
                       child: AutoSizeText(
                         stamp.productName.toUpperCase(),
                         minFontSize: 8,
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -57,9 +58,12 @@ class StampPreview extends StatelessWidget {
                       child: stamp.createAt.isEmpty
                           ? Container()
                           : AutoSizeText("NNH: ${stamp.createAt}",
-                              minFontSize: 8),
+                              minFontSize: 8,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    AutoSizeText("HSD: ${stamp.expriedAt}", minFontSize: 8)
+                    AutoSizeText("HSD: ${stamp.expriedAt}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        minFontSize: 8)
                   ])),
         ));
   }

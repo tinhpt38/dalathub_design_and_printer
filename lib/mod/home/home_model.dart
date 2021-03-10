@@ -44,8 +44,8 @@ class HomeModel extends ChangeNotifier {
   Printer get printer => _printer;
 
   HomeModel() {
-    _stamp = Stamp(_unitController.text.trim(), 'Coffe',
-        _createAtController.text, _expriedAtController.text);
+    _stamp = Stamp('Readtime Preview', 'DaLatHub', _createAtController.text,
+        _expriedAtController.text);
   }
 
   void preview() {
@@ -128,7 +128,8 @@ class HomeModel extends ChangeNotifier {
     }
 
     final doc = pw.Document();
-    PdfPageFormat format = PdfPageFormat(180, 50);
+    PdfPageFormat format =
+        PdfPageFormat(200, 50, marginLeft: 8, marginRight: 4);
     for (int i = 0; i < _printQuantity; i++) {
       doc.addPage(renderPage(format));
     }
@@ -179,28 +180,31 @@ class HomeModel extends ChangeNotifier {
   }
 
   pw.Widget generatePdf() {
-    return pw.Column(children: [
+    return pw.Column(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
       _unitController.text.isNotEmpty
           ? pw.Padding(
-              padding: const pw.EdgeInsets.symmetric(vertical: 4),
+              padding: const pw.EdgeInsets.symmetric(vertical: 2),
               child: pw.Text(_stamp.unitName,
-                  style: pw.TextStyle(fontSize: 6),
+                  style:
+                      pw.TextStyle(fontSize: 6, fontWeight: pw.FontWeight.bold),
                   textAlign: pw.TextAlign.center),
             )
-          : pw.Container(
-              padding: const pw.EdgeInsets.symmetric(vertical: 4),
-            ),
+          : pw.Container(),
       pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 4),
+        padding: const pw.EdgeInsets.symmetric(vertical: 2),
         child: pw.Text(_stamp.productName.toUpperCase(),
-            style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center),
+            style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+            textAlign: pw.TextAlign.center),
       ),
       _stamp.createAt.isNotEmpty
           ? pw.Text('NNH: ' + _stamp.createAt,
-              style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center)
+              style: pw.TextStyle(fontSize: 8), textAlign: pw.TextAlign.center)
           : pw.Container(),
-      pw.Text('HSD: ' + _stamp.expriedAt,
-          style: pw.TextStyle(fontSize: 6), textAlign: pw.TextAlign.center),
+      pw.Padding(
+        padding: const pw.EdgeInsets.only(bottom: 4),
+        child: pw.Text('HSD: ' + _stamp.expriedAt,
+            style: pw.TextStyle(fontSize: 8), textAlign: pw.TextAlign.center),
+      ),
     ]);
   }
 }
