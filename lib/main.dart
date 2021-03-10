@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         const Locale('vi', 'VI'), // Vietnamese
       ],
       debugShowCheckedModeBanner: false,
-      title: 'DaLatHub Printer',
+      title: 'DaLatHub Design and Printer',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

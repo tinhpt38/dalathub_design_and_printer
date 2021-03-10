@@ -30,7 +30,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(&run_loop, project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.CreateAndShow(L"design_and_printer", origin, size)) {
+
+  // if (!window.CreateAndShow(L"design_and_printer", origin, size)) {
+  //   return EXIT_FAILURE;
+  // }
+
+  if (!window.CreateAndShow(L"Design And Printer", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

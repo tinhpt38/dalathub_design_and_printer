@@ -5,7 +5,8 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = design_and_printer
+//PRODUCT_NAME = design_and_printer
+PRODUCT_NAME = Design And Printer
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.dalathub.designAndPrinter
