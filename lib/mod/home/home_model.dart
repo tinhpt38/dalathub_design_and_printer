@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:design_and_printer/core/models/stamp.dart';
 import 'package:design_and_printer/core/utils/io.dart';
@@ -61,25 +62,33 @@ class HomeModel extends ChangeNotifier {
     }
   }
 
-  void setError(bool err) {
-    _error = err;
-    notifyListeners();
-  }
-
-  void setSuccess(bool suceess) {
-    _success = success;
+  void clearMessage() {
+    _error = false;
+    _success = false;
     notifyListeners();
   }
 
   FileIO fileIO = FileIO();
 
+  void setPrinter(Printer value) {
+    _printer = value;
+    notifyListeners();
+  }
+
   Future<void> readConfig() async {
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
+      String printerFormDB = await fileIO.readFile(ShareName.device);
+      if (printerFormDB != null) {
+        Map<String, dynamic> json = jsonDecode(printerFormDB);
+        _printer = Printer.fromMap(json);
+        _success = true;
+        _message = 'Đã kết nối với máy in ${_printer.name}';
+      }
       _stamp = Stamp(unitController.text, productController.text,
           createAtController.text, expriedAtController.text);
-      notifyListeners();
     } catch (_) {}
+    notifyListeners();
   }
 
   // Future<void> print() async {
@@ -98,10 +107,6 @@ class HomeModel extends ChangeNotifier {
   //   await Printing.layoutPdf(
   //       onLayout: (PdfPageFormat format) async => doc.save());
   // }
-
-  setPrinter(Printer value) {
-    _printer = value;
-  }
 
   Future<void> print() async {
     if (_productController.text.isEmpty) {
@@ -133,14 +138,18 @@ class HomeModel extends ChangeNotifier {
     for (int i = 0; i < _printQuantity; i++) {
       doc.addPage(renderPage(format));
     }
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
-
-    // await Printing.directPrintPdf(
-    //     printer: _printer,
-    //     onLayout: (PdfPageFormat format) async {
-    //       return await doc.save();
-    //     });
+    // await Printing.layoutPdf(
+    //     onLayout: (PdfPageFormat format) async => doc.save());
+    if (_printer == null) {
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => doc.save());
+    } else {
+      await Printing.directPrintPdf(
+          printer: _printer,
+          onLayout: (PdfPageFormat format) async {
+            return await doc.save();
+          });
+    }
   }
 
   pw.Page renderPage(PdfPageFormat format) {

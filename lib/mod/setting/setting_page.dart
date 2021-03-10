@@ -1,6 +1,7 @@
 import 'package:design_and_printer/core/values/app_color.dart';
 import 'package:design_and_printer/core/widgets/button.dart';
 import 'package:design_and_printer/core/widgets/input.dart';
+import 'package:design_and_printer/core/widgets/printer_item.dart';
 import 'package:design_and_printer/mod/setting/setting_model.dart';
 import 'package:flutter/material.dart';
 import 'package:matt_q/matt_q.dart';
@@ -51,10 +52,53 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Input(
+                              maxLen: 30,
                               controller: model.unitController,
                               title: 'Tên đơn vị',
                               onChange: null),
-                          Spacer(),
+                          Container(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Text('Danh sách máy in',
+                                  style:
+                                      TextStyle(color: AppColor.titleColor))),
+                          Expanded(
+                              child: Container(
+                            padding: const EdgeInsets.all(12),
+                            margin: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black, width: 1),
+                            ),
+                            child: RefreshIndicator(
+                              key: GlobalKey(),
+                              onRefresh: () async {
+                                await model.readConfig();
+                              },
+                              child: model.printers.isEmpty
+                                  ? ListView(
+                                      children: [
+                                        Container(
+                                            child: Text(
+                                                'Chưa tim thấy thiết bị nào'))
+                                      ],
+                                    )
+                                  : ListView.builder(
+                                      itemCount: model.printers.length,
+                                      itemBuilder: (context, index) {
+                                        return PrinterItem(
+                                            title: model.printers[index].name,
+                                            isSelect: (model
+                                                        .seletedPrinter.model ==
+                                                    model.printers[index]
+                                                        .model) &&
+                                                (model.seletedPrinter.name ==
+                                                    model.printers[index].name),
+                                            onSeleted: (_) {
+                                              model.setPrinter(
+                                                  model.printers[index]);
+                                            });
+                                      }),
+                            ),
+                          )),
                           Button(
                             'Lưu',
                             () async {
@@ -77,7 +121,7 @@ class _SettingPageState extends MattQ<SettingPage, SettingModel> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Tên phần mềm: DaLatHub Desige and Printer",
+                          "Tên phần mềm: DaLatHub Design and Printer",
                         ),
                       ),
                       Padding(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:design_and_printer/core/utils/io.dart';
 import 'package:design_and_printer/core/values/share_name.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class SettingModel extends ChangeNotifier {
 
   setPrinter(Printer value) {
     _seletedPrinter = value;
+    print(_seletedPrinter.toString());
     notifyListeners();
   }
 
@@ -40,16 +43,26 @@ class SettingModel extends ChangeNotifier {
     _printers = await Printing.listPrinters();
     try {
       _unitController.text = await fileIO.readFile(ShareName.unit);
-      notifyListeners();
+      String printerFormDB = await fileIO.readFile(ShareName.device);
+      if (printerFormDB != null) {
+        Map<String, dynamic> json = jsonDecode(printerFormDB);
+        _seletedPrinter = Printer.fromMap(json);
+        print('read config');
+        print(_seletedPrinter);
+      }
     } catch (_) {
       print('err');
     }
+    notifyListeners();
   }
 
   Future<void> save() async {
     try {
       await fileIO.write(
           fileName: ShareName.unit, value: '${_unitController.text.trim()}');
+      String printerInfo = jsonEncode(_seletedPrinter.toJson());
+      print(printerInfo);
+      await fileIO.write(fileName: ShareName.device, value: '$printerInfo');
       _success = true;
       _error = false;
       _message = 'Lưu thành công';
@@ -60,4 +73,15 @@ class SettingModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+extension value on Printer {
+  Map<String, dynamic> toJson() => {
+        'url': this.url,
+        'location': this.location,
+        'model': this.model,
+        'comment': this.comment,
+        'isDefault': this.isDefault,
+        'isAvailable': this.isAvailable
+      };
 }

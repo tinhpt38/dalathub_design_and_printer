@@ -38,14 +38,13 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
           final messenger = ScaffoldMessenger.of(context);
           messenger.showSnackBar(SnackBar(
               content: Text(model.message), backgroundColor: Colors.red));
-          model.setError(false);
         }
         if (model.success) {
           final messenger = ScaffoldMessenger.of(context);
           messenger.showSnackBar(SnackBar(
               content: Text(model.message), backgroundColor: Colors.green));
-          model.setSuccess(false);
         }
+        model.clearMessage();
       });
       return Scaffold(
         backgroundColor: Colors.white,
@@ -137,7 +136,6 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 26),
                                     child: Button('IN', () async {
-                                      // await selectPrinter(model, context);
                                       await model.print();
                                     }),
                                   ),
@@ -156,12 +154,6 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
         ),
       );
     };
-  }
-
-  Future<void> selectPrinter(HomeModel model, BuildContext context) async {
-    Printer printer = await Printing.pickPrinter(context: context);
-    // print(printer);
-    model.setPrinter(printer);
   }
 
   @override
