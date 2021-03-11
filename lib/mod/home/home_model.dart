@@ -5,9 +5,11 @@ import 'package:design_and_printer/core/models/stamp.dart';
 import 'package:design_and_printer/core/utils/io.dart';
 import 'package:design_and_printer/core/values/share_name.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:tiengviet/tiengviet.dart';
 
 class HomeModel extends ChangeNotifier {
   //Vars
@@ -54,13 +56,12 @@ class HomeModel extends ChangeNotifier {
     if (expriedAtController.text.isEmpty) {
       _error = true;
       _message = 'Ngày hết hạn không được để trống';
-      notifyListeners();
     } else {
       _error = false;
       _stamp = Stamp(unitController.text, productController.text,
           createAtController.text, expriedAtController.text);
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   void clearMessage() {
@@ -218,7 +219,7 @@ class HomeModel extends ChangeNotifier {
       _unitController.text.isNotEmpty
           ? pw.Padding(
               padding: const pw.EdgeInsets.symmetric(vertical: 2),
-              child: pw.Text(_stamp.unitName,
+              child: pw.Text(TiengViet.parse(_stamp.unitName),
                   style:
                       pw.TextStyle(fontSize: 6, fontWeight: pw.FontWeight.bold),
                   textAlign: pw.TextAlign.center),
@@ -226,7 +227,7 @@ class HomeModel extends ChangeNotifier {
           : pw.Container(),
       pw.Padding(
         padding: const pw.EdgeInsets.all(2),
-        child: pw.Text(_stamp.productName.toUpperCase(),
+        child: pw.Text(TiengViet.parse(_stamp.productName.toUpperCase()),
             style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
             textAlign: pw.TextAlign.center),
       ),

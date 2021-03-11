@@ -39,6 +39,8 @@ dependencies:
   url_launcher: ^6.0.2
   printing: ^5.0.2
   matt_q: ^0.2.0
+  tiengviet: ^0.4.1
+  intl: ^0.17.0
 
 
 
