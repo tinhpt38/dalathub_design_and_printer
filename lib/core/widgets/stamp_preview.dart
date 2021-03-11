@@ -12,7 +12,7 @@ class StampPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: AspectRatio(
-        aspectRatio: 1,
+        aspectRatio: 1.5,
         child: render(context),
       ),
     );
@@ -21,7 +21,7 @@ class StampPreview extends StatelessWidget {
   Widget render(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-        padding: EdgeInsets.all(size.width * 1 / 20),
+        padding: EdgeInsets.all(size.width * 1 / 25),
         color: AppColor.previewBackground,
         child: AspectRatio(
           aspectRatio: 3 / 2,

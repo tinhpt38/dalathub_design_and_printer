@@ -165,7 +165,7 @@ class _HomePageState extends MattQ<HomePage, HomeModel> {
                     flex: 1,
                   ),
                 ]),
-                SizedBox(height: 100),
+                SizedBox(height: 50),
               ],
             ),
           ),
