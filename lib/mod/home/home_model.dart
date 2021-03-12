@@ -224,7 +224,9 @@ class HomeModel extends ChangeNotifier {
                       pw.TextStyle(fontSize: 6, fontWeight: pw.FontWeight.bold),
                   textAlign: pw.TextAlign.center),
             )
-          : pw.Container(),
+          : pw.Padding(
+              child: pw.Container(),
+              padding: const pw.EdgeInsets.symmetric(vertical: 2)),
       pw.Padding(
         padding: const pw.EdgeInsets.all(2),
         child: pw.Text(TiengViet.parse(_stamp.productName.toUpperCase()),
@@ -234,7 +236,9 @@ class HomeModel extends ChangeNotifier {
       _stamp.createAt.isNotEmpty
           ? pw.Text('NNH: ' + _stamp.createAt,
               style: pw.TextStyle(fontSize: 8), textAlign: pw.TextAlign.center)
-          : pw.Container(),
+          : pw.Padding(
+              child: pw.Container(),
+              padding: const pw.EdgeInsets.symmetric(vertical: 2)),
       pw.Padding(
         padding: const pw.EdgeInsets.only(bottom: 2),
         child: pw.Text('HSD: ' + _stamp.expriedAt,
